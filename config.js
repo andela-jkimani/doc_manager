@@ -1,4 +1,4 @@
 module.exports = {
   secret: 'jacky',
-  database: 'mongodb://localhost/doc_manager',
+  database: 'mongodb://localhost:27017/doc_manager',
 };

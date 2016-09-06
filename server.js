@@ -31,11 +31,11 @@ app.get('/', function(req, res) {
 app.get('/setup', function(req, res) {
   // creating a user
   var jacky = new User({
-    id: 2,
-    username: 'sylvia',
-    name: { first: 'Sylvia', last: 'Kimani' },
-    email: 'sylvia@gmail.com',
-    password: 'sylvia',
+    id: 3,
+    username: 'maggie',
+    name: { first: 'Maggie', last: 'Kimani' },
+    email: 'maggie@gmail.com',
+    password: 'maggie',
     admin: false,
   });
   // saving the user
