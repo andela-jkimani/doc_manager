@@ -1,6 +1,7 @@
 (function() {
   'use strict';
   var mongoose = require('mongoose');
+  var Role = require('./roles');
 
   var Schema = mongoose.Schema;
 
@@ -8,32 +9,41 @@
     id: {
       type: Number,
       required: true,
-      unique: true,
+      unique: true
     },
     username: {
       type: String,
       required: true,
-      unique: true,
+      unique: true
     },
     name: {
-      first: {
+      firstName: {
         type: String,
-        required: true,
+        required: true
       },
-      last: {
+      lastName: {
         type: String,
-        required: true,
-      },
+        required: true
+      }
     },
     email: {
       type: String,
-      required: true,
+      required: true
+      // validate: {
+      //   validator: function(v) {
+      //     return (/([a-z]*)@([a-z]*)([.])([a-z]*)/g).test(v);
+      //   },
+      //   message: 'Enter a valid email!'
+      // }
     },
     password: {
       type: String,
-      required: true,
+      required: true
     },
-    admin: Boolean,
+    Role: {
+      type: String,
+      ref: Role.title
+    }
   });
 
   module.exports = mongoose.model('User', userSchema);

@@ -4,7 +4,8 @@
   "description": "Document management system",
   "main": "server.js",
   "scripts": {
-    "test": "mocha tests"
+    "test": "mocha tests",
+    "start": "nodemon server.js"
   },
   "author": "Jacky Kimani",
   "license": "ISC",

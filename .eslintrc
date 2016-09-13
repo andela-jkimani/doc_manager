@@ -29,6 +29,9 @@
         "prefer-template": off,
         "new-cap": off,
         "no-sequences": off,
-        "no-param-reassign": off
+        "no-param-reassign": off,
+        "comma-dangle": ["error", "never"],
+        "object-shorthand": off,
+        "import/newline-after-import": off
     }
 }

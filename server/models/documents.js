@@ -10,20 +10,20 @@
     id: {
       type: Number,
       required: true,
-      unique: true,
+      unique: true
     },
     ownerId: {
       type: Number,
       required: true,
-      ref: User.id,
+      ref: User.id
     },
     title: {
       type: String,
-      trim: true,
+      trim: true
     },
     content: {
       type: String,
-      trim: true,
+      trim: true
     },
     accessLevel: {
       type: String,
@@ -33,9 +33,9 @@
     createdAt: {
       type: Date,
       required: true,
-      default: Date.now(),
+      default: Date.now()
     },
-    modifiedAt: Date,
+    modifiedAt: Date
   });
 
   module.exports = mongoose.model('Document', documentSchema);
