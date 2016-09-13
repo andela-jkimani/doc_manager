@@ -10,7 +10,7 @@ app.post('users/logout');
 
 app.route('/users')
   // Find matching instances of user.
-  .get(User.allUsers)
+  .get(User.getAll)
   // Creates a new user
   .post(User.signup);
 

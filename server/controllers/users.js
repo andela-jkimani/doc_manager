@@ -50,7 +50,7 @@ module.exports = {
     });
   },
 
-  allUsers: function(req, res, next) {
+  getAll: function(req, res, next) {
     User.find(function(err, users) {
       if (err) return next(err);
       return res.json(users);
@@ -62,5 +62,33 @@ module.exports = {
       if (err) return next(err);
       return res.json(user);
     });
+  },
+
+  getOne: function(req, res) {
+    User.findOne({ _id: req.params.id }, function(err, user) {
+      if (err) {
+        res.status(404).send({ message: 'user was not found' });
+      } else {
+        res.send(user);
+      }
+    });
+  },
+
+  authenticate: function(req, res, next) {
+    // get the token from body, query or token.
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    if (token) {
+      jwt.verify(token, config.secret, function(err, decoded) {
+        if (err) {
+          res.send(err);
+        } else {
+          // store the decoded token  info in a request object. To be used in subsequent requests.
+          req.decoded = decoded;
+          next();
+        }
+      });
+    } else {
+      res.status(401).send({ message: 'no token provided, login to get a token.' });
+    }
   }
 };

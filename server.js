@@ -22,10 +22,6 @@ app.get('/', function(req, res) {
   res.send('Welcome to my API!!');
 });
 
-app.post('/login', function(req, res) {
-
-});
-
 // start the server
 app.listen(port, function() {
   console.log('Magic happens at http://localhost:' + port);
