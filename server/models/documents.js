@@ -7,13 +7,8 @@
 
   // defining the role schema
   var documentSchema = new Schema({
-    id: {
-      type: Number,
-      required: true,
-      unique: true
-    },
     ownerId: {
-      type: Number,
+      type: String,
       required: true,
       ref: User.id
     },
@@ -29,7 +24,8 @@
       type: String,
       required: true,
       enum: ['private', 'public'],
-      default: 'public' },
+      default: 'public'
+    },
     createdAt: {
       type: Date,
       required: true,
