@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var Document = require('../controllers/documents');
+var Document = require('../controllers/document');
 
 app.route('/documents/')
   .get(Document.getAll)
