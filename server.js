@@ -2,10 +2,7 @@ var express = require('express');
 
 var app = express();
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
 var morgan = require('morgan');
-var config = require('./config'); // get our config file
-
 
 // configuration
 var port = process.env.PORT || 8080; // used to create, sign and verify tokens
