@@ -32,6 +32,6 @@
         "no-param-reassign": off,
         "comma-dangle": ["error", "never"],
         "object-shorthand": off,
-        "import/newline-after-import": off
+        "import/newline-after-import": off,
     }
 }

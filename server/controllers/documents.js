@@ -21,14 +21,14 @@
       });
     },
 
-    getAll: function(req, res, next) {
+    readAll: function(req, res, next) {
       Document.find(function(err, document) {
         if (err) return next(err);
         return res.json(document);
       });
     },
 
-    getOne: function(req, res) {
+    readOne: function(req, res) {
       Document.findOne({ _id: req.params.id }, function(err, document) {
         if (err) {
           res.status(404).send({ message: 'user was not found' });

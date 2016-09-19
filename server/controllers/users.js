@@ -4,49 +4,48 @@ var User = require('../models/users');
 
 
 module.exports = {
-  login: function(req, res) {
-    // find the users
+  logIn: function(req, res) {
     User.findOne({
       username: req.body.username
     }, function(err, user) {
       if (err) throw err;
       if (!user) {
-        res.json({ success: false, message: 'Authentication failed. No user found' });
+        res.json({ success: false, message: 'User not found' });
       } else if (user) {
-        // check if password matches
-        if (user.password !== res.body.password) {
-          res.json({ success: false, message: 'Authentication failed. Wrong password' });
+        if (user.password !== req.body.password) {
+          res.json({ success: false, message: 'Incorrect password' });
         } else {
-          // if user is found and password is correct create a token
           var token = jwt.sign(user, config.secret, {
-            expiresInMinutes: 1440
+            expiresIn: 1440 // 24 hours
           });
-        // return the information incuding the token
           res.json({
             success: true,
-            message: 'Authentication passed.',
-            token
+            message: 'Successfully authenticated!',
+            token: token
           });
         }
       }
     });
   },
 
+
   signup: function(req, res) {
     var user = new User();
 
-    user.id = req.body.id;
     user.username = req.body.username;
-    user.name = req.body.name;
+    user.name = { firstName: req.body.firstName, lastName: req.body.lastName };
     user.email = req.body.email;
     user.password = req.body.password;
-
     user.save(function(err) {
       if (err) {
-        console.log(err);
-        return res.status(500).send();
+        if (err.code === 11000) {
+          res.status(409).send({ message: 'Duplicate' });
+        } else {
+          res.status(500).send(err);
+        }
+      } else {
+        return res.status(200).send({ message: 'User created' });
       }
-      return res.status(200).send();
     });
   },
 
@@ -75,20 +74,24 @@ module.exports = {
   },
 
   authenticate: function(req, res, next) {
-    // get the token from body, query or token.
+    // check header or url parameters or post parameters for token
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+    // decode token
     if (token) {
       jwt.verify(token, config.secret, function(err, decoded) {
         if (err) {
-          res.send(err);
+          res.json({ success: false, message: 'Token authentication failed' });
         } else {
-          // store the decoded token  info in a request object. To be used in subsequent requests.
-          req.decoded = decoded;
+          res.decoded = decoded;
           next();
         }
       });
     } else {
-      res.status(401).send({ message: 'no token provided, login to get a token.' });
+      return res.status(403).send({
+        success: false,
+        message: 'No token provided'
+      });
     }
   }
 };
