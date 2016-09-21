@@ -71,12 +71,12 @@ module.exports = {
 
   update: function(req, res) {
     User.findByIdAndUpdate({ _id: req.params.id },
-      { $set: { username: req.body.username } }, function(err, user) {
+      { $set: req.body }, function(err, user) {
         user.save(function() {
           if (err) {
             res.send(err);
           } else if (user) {
-            res.status(200).send({ success: true, message: 'User successfully updated', user });
+            res.status(200).send({ success: true, message: 'User successfully updated' });
           } else {
             res.status(404).send({ success: false, message: 'User not found' });
           }
