@@ -16,6 +16,7 @@
     "jsonwebtoken": "^7.1.9",
     "mongo": "^0.1.0",
     "mongoose": "^4.5.10",
+    "mongoose-seeder": "^1.2.1",
     "morgan": "^1.7.0",
     "should": "^11.1.0"
   },

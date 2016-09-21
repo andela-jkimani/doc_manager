@@ -36,8 +36,8 @@
       type: String,
       required: true
     }
-    // Role: {
-    //   type: String,
+    // role: {
+    //   type: mongoose.Schema.Types.ObjectId,
     //   ref: Role.title
     // }
   });
