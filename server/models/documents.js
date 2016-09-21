@@ -8,7 +8,7 @@
   // defining the role schema
   var documentSchema = new Schema({
     ownerId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: User.id
     },
@@ -20,11 +20,14 @@
       type: String,
       trim: true
     },
-    accessLevel: {
+    accessType: {
       type: String,
       required: true,
       enum: ['private', 'public'],
       default: 'public'
+    },
+    genre: {
+      type: String
     },
     createdAt: {
       type: Date,

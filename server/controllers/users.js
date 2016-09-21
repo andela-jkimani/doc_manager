@@ -54,22 +54,40 @@ module.exports = {
       if (err) return next(err);
       return res.json(users);
     });
+    console.log(req);
+  },
+
+  getOne: function(req, res) {
+    User.findOne({ _id: req.params.id }, function(err, user) {
+      if (err) {
+        res.send(err);
+      } else if (user) {
+        res.send(user);
+      } else {
+        res.status(404).send({ message: 'User was not found' });
+      }
+    });
+  },
+
+  update: function(req, res) {
+    User.findByIdAndUpdate({ _id: req.params.id },
+      { $set: { username: req.body.username } }, function(err, user) {
+        user.save(function() {
+          if (err) {
+            res.send(err);
+          } else if (user) {
+            res.status(200).send({ success: true, message: 'User successfully updated', user });
+          } else {
+            res.status(404).send({ success: false, message: 'User not found' });
+          }
+        });
+      });
   },
 
   delete: function(req, res, next) {
     User.findByIdAndRemove(req.body.id, req.body, function(err, user) {
       if (err) return next(err);
       return res.json(user);
-    });
-  },
-
-  getOne: function(req, res) {
-    User.findOne({ _id: req.params.id }, function(err, user) {
-      if (err) {
-        res.status(404).send({ message: 'user was not found' });
-      } else {
-        res.send(user);
-      }
     });
   },
 
