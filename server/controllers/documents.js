@@ -15,21 +15,21 @@
       document.save(function(err) {
         if (err) {
           console.log(err);
-          return res.status(200).send();
+          return res.status(404).send();
         }
         return res.status(200).send();
       });
     },
 
-    readAll: function(req, res, next) {
+    getAll: function(req, res, next) {
       Document.find(function(err, document) {
         if (err) return next(err);
         return res.json(document);
       });
     },
 
-    readOne: function(req, res) {
-      Document.findOne({ _id: req.params.id }, function(err, document) {
+    getOne: function(req, res) {
+      Document.findById({ _id: req.params.id }, function(err, document) {
         if (err) {
           res.status(404).send({ message: 'user was not found' });
         } else {
@@ -38,10 +38,13 @@
       });
     },
 
-    delete: function(req, res, next) {
-      Document.findByIdAndRemove(req.body.id, req.body, function(err, document) {
-        if (err) return next(err);
-        return res.json(document);
+    delete: function(req, res) {
+      Document.findByIdAndRemove({ _id: req.params.id }, function(err) {
+        if (err) {
+          res.status(404).send(err);
+        } else {
+          res.status(200).send({ success: true, message: 'Document deleted successfully' });
+        }
       });
     }
   };

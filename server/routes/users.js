@@ -7,6 +7,7 @@ module.exports = function(app) {
 
   app.route('/users/:id')
     .get(User.authenticate, User.getOne)
+    .put(User.authenticate, User.update)
     .delete(User.authenticate, User.delete);
 
   app.post('/users/logIn', User.logIn);
