@@ -10,4 +10,6 @@ module.exports = function(app) {
     .get(User.authenticate, Document.getOne)
     // .put(User.authenticate, Document.update)
     .delete(User.authenticate, Document.delete);
+
+  app.get('documents/users/:id', User.authenticate, Document.getByUser);
 };

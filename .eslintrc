@@ -33,5 +33,6 @@
         "comma-dangle": ["error", "never"],
         "object-shorthand": off,
         "import/newline-after-import": off,
+        import/no-extraneous-dependencies: ["error", {"devDependencies": true}]
     }
 }

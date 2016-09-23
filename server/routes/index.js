@@ -1,4 +1,5 @@
 module.exports = function(app) {
+  require('./roles')(app);
   require('./documents')(app);
   require('./users')(app);
 

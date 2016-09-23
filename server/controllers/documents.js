@@ -28,6 +28,26 @@
       });
     },
 
+    getByLimit: function(req, res) {
+      Document.find()
+      .limit(req.params.limit)
+      .exec(function(err, document) {
+        if (err) res.send(err);
+        return res.json(document);
+      })
+      ;
+    },
+
+    getByUser: function(req, res) {
+      Document.find({ ownerId: req.params.ownerId }, function(err, documents) {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(documents);
+        }
+      });
+    },
+
     getOne: function(req, res) {
       Document.findById({ _id: req.params.id }, function(err, document) {
         if (err) {

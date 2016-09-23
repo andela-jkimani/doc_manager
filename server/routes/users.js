@@ -10,5 +10,7 @@ module.exports = function(app) {
     .put(User.authenticate, User.update)
     .delete(User.authenticate, User.delete);
 
-  app.post('/users/logIn', User.logIn);
+  app.post('/users/login', User.login);
+  app.get('/users/logout', User.logout);
+  app.get('/users/limit/:limit', User.getByLimit);
 };
