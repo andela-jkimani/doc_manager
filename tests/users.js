@@ -9,14 +9,27 @@ chai.use(chaiHttp);
 
 describe('Users', () => {
   beforeEach((done) => {
-    User.remove({}, () => {
-      done();
-    });
+    chai.request(server)
+      .post('/users/login')
+      .send({
+        username: 'sylvia',
+        password: 'sylvia'
+      })
+      .end((err, res) => {
+        if (err) {
+          console.log(err);
+        }
+        token = res.body.token;
+        done();
+      });
   });
 
 // Testing the GET route
   describe('/GET users', () => {
     it('it should GET no users when database is empty', (done) => {
+      User.remove({}, () => {
+        console.log('Users removed');
+      });
       chai.request(server)
           .get('/users')
           .end((err, res) => {
@@ -52,7 +65,7 @@ describe('Users', () => {
 
     it('should create a user', (done) => {
       var user = {
-        username: 'maggie',
+        username: 'jkggie',
         firstName: 'maggie',
         lastName: 'kimani',
         email: 'maggie@gmail.com',
