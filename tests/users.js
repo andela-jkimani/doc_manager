@@ -28,7 +28,7 @@ describe('Users', () => {
   describe('/GET users', () => {
     it('it should GET no users when database is empty', (done) => {
       User.remove({}, () => {
-        console.log('Users removed');
+        console.log('All users removed');
       });
       chai.request(server)
           .get('/users')
