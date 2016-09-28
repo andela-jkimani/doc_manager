@@ -1,13 +1,17 @@
 module.exports = function(app) {
   var Document = require('../controllers/documents');
-  var User = require('../controllers/users');
+  var Auth = require('../controllers/middleware');
+
+  // app.use(Auth.authenticate, Auth.authAccess);
 
   app.route('/documents')
-    .get(User.authenticate, Document.getAll)
-    .post(User.authenticate, Document.create);
+    .get(Auth.authenticate, Document.getAll)
+    .post(Auth.authenticate, Document.create);
 
   app.route('/documents/:id')
-    .get(User.authenticate, Document.getOne)
-    // .put(User.authenticate, Document.update)
-    .delete(User.authenticate, Document.delete);
+    .get(Auth.authenticate, Document.getOne)
+    .put(Auth.authenticate, Document.update)
+    .delete(Auth.authenticate, Document.delete);
+
+  app.get('documents/users/:id', Auth.authenticate, Auth.authAccess, Document.getByUser);
 };

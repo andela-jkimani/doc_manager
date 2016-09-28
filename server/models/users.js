@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   var mongoose = require('mongoose');
-  // var bcrypt = require('bcrypt');
+  var bcrypt = require('bcrypt');
   // var Role = requiem2re('./roles');
 
   var Schema = mongoose.Schema;
@@ -35,17 +35,18 @@
     password: {
       type: String,
       required: true
+    },
+    role: {
+      type: String,
+      required: true,
+      enum: ['admin', 'user']
     }
-    // role: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: Role.title
-    // }
   });
 
-  // userSchema.pre('save', function(done) {
-  //   this.password = bcrypt.hashSync(this.password, 10);
-  //   done();
-  // });
+  userSchema.pre('save', function(done) {
+    this.password = bcrypt.hashSync(this.password, 10);
+    done();
+  });
 
   module.exports = mongoose.model('User', userSchema);
 })();

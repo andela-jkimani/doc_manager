@@ -9,7 +9,7 @@
       type: String,
       required: true,
       unique: true,
-      enum: ['Admin', 'Owner', 'Viewer']
+      enum: ['admin', 'user']
     }
   });
 

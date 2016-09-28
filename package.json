@@ -4,21 +4,26 @@
   "description": "Document management system",
   "main": "server.js",
   "scripts": {
-    "test": "mocha tests",
+    "pretest": "node server/seeds/seed.js",
+    "test": "NODE_ENV=test mocha tests",
     "start": "nodemon server.js"
   },
   "author": "Jacky Kimani",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^0.8.7",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
+    "chai-http": "^3.0.0",
     "express": "^4.14.0",
     "jsonwebtoken": "^7.1.9",
+    "jwt-decode": "^2.1.0",
     "mongo": "^0.1.0",
     "mongoose": "^4.5.10",
     "mongoose-seeder": "^1.2.1",
     "morgan": "^1.7.0",
-    "should": "^11.1.0"
+    "should": "^11.1.0",
+    "supertest": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
