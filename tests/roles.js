@@ -1,4 +1,3 @@
-var mongoose = require('mongoose');
 var Role = require('../server/models/roles');
 var chai = require('chai');
 var chaiHttp = require('chai-http');

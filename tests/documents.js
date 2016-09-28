@@ -1,5 +1,3 @@
-var mongoose = require('mongoose');
-var User = require('../server/models/users');
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var server = require('../server');

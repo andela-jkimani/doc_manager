@@ -1,4 +1,3 @@
-var mongoose = require('mongoose');
 var User = require('../server/models/users');
 var chai = require('chai');
 var chaiHttp = require('chai-http');
@@ -6,7 +5,6 @@ var server = require('../server');
 var should = chai.should();
 
 chai.use(chaiHttp);
-
 describe('Users', () => {
   beforeEach((done) => {
     chai.request(server)
@@ -15,11 +13,11 @@ describe('Users', () => {
         username: 'sylvia',
         password: 'sylvia'
       })
-      .end((err, res) => {
+      .end((err) => {
         if (err) {
           console.log(err);
         }
-        token = res.body.token;
+        // token = res.body.token;
         done();
       });
   });

@@ -1,7 +1,6 @@
 (function() {
   var Document = require('../models/documents');
   var jwt = require('jsonwebtoken');
-  var User = require('../models/users');
 
   module.exports = {
     create: function(req, res) {
@@ -102,10 +101,10 @@
             if (req.body.title) { document.title = req.body.title; }
             if (req.body.accessType) { document.accessType = req.body.accessType; }
             if (req.body.genre) { document.genre = req.body.genre; }
-            document.save(function(err) {
+            document.save(function() {
               if (err) res.send(err);
               res.status(200).send({ success: true, message: 'Document successfully updated' });
-            })
+            });
           } else {
             res.status(403).send({ success: false, message: 'Not authorized to update' });
           }
