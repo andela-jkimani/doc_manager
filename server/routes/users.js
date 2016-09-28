@@ -15,7 +15,7 @@ module.exports = function(app) {
     .put(Auth.authenticate, Auth.authAccess, User.update)
     .delete(Auth.authenticate, Auth.authAccess, User.delete);
 
-  app.get('/users/logout', Auth.authenticate, Auth.authAccess, User.logout);
+  // app.get('/users/logout', Auth.authenticate, Auth.authAccess, User.logout);
   app.get('/users/limit/:limit', Auth.authenticate, Auth.authAccess,
     User.getByLimit);
 };

@@ -24,7 +24,8 @@
     },
     email: {
       type: String,
-      required: true
+      required: true,
+      unique: true
       // validate: {
       //   validator: function(v) {
       //     return (/([a-z]*)@([a-z]*)([.])([a-z]*)/g).test(v);

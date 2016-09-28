@@ -14,4 +14,6 @@ module.exports = function(app) {
     .delete(Auth.authenticate, Document.delete);
 
   app.get('documents/users/:id', Auth.authenticate, Auth.authAccess, Document.getByUser);
+  app.get('/users/:user_id/documents', Document.getByUser);
+  // app.get('/search', Document.getByGenre);
 };

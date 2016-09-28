@@ -46,7 +46,7 @@ describe('Roles', () => {
         });
     });
 
-    it('should return all roles in database', () => {
+    it('should return all roles in the database', () => {
       chai.request(server)
         .get('/roles')
         .set('x-access-token', token)

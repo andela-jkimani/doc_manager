@@ -1,6 +1,7 @@
 (function() {
   var Document = require('../models/documents');
   var jwt = require('jsonwebtoken');
+  var User = require('../models/users');
 
   module.exports = {
     create: function(req, res) {
@@ -34,18 +35,37 @@
       });
     },
 
+    // getByLimit: function(req, res) {
+    //   Document.find()
+    //   .limit(req.params.limit)
+    //   .exec(function(err, document) {
+    //     if (err) res.send(err);
+    //     return res.json(document);
+    //   })
+    //   ;
+    // },
+
     getByLimit: function(req, res) {
-      Document.find()
-      .limit(req.params.limit)
-      .exec(function(err, document) {
-        if (err) res.send(err);
-        return res.json(document);
-      })
-      ;
+      var limit = req.query.limit;
+      if (limit) {
+        Document.find(function(err, documents) {
+          return res.send(documents);
+        });
+      }
     },
 
     getByUser: function(req, res) {
-      Document.find({ ownerId: req.params.id }, function(err, documents) {
+      Document.find({ ownerId: req.params.user_id }, function(err, documents) {
+        if (err) {
+          res.status(404).send(err);
+        } else {
+          res.send(documents);
+        }
+      });
+    },
+
+    getByGenre: function(req, res) {
+      Document.find({ genre: req.params.genre }, function(err, documents) {
         if (err) {
           res.status(404).send(err);
         } else {
@@ -57,10 +77,10 @@
     getOne: function(req, res) {
       var decoded = jwt.decode(req.headers['x-access-token']);
       Document.findById({ _id: req.params.id }, function(err, document) {
-        console.log(decoded.id);
-        console.log(document.ownerId);
         if (err) {
           res.send(err);
+        } else if (document === null) {
+          res.send({ success: false, message: 'Not found' });
         } else if (decoded.id !== document.ownerId && decoded.role !== 'admin') {
           res.status(403).send({ success: false, message: 'Not authorized to view' });
         } else if (decoded.id === document.ownerId || decoded.role === 'admin') {
@@ -72,23 +92,27 @@
     },
 
     update: function(req, res) {
-      Document.findByIdAndUpdate({ _id: req.params.id },
-        { $set: req.body }, function(err, document) {
-          document.save(function() {
-            var decoded = jwt.decode(req.headers['x-access-token']);
-            if (err) {
-              res.send(err);
-            } else if (document) {
-              if (decoded.id === document.ownerId || decoded.role === 'admin') {
-                res.status(200).send({ success: true, message: 'Document successfully updated' });
-              } else {
-                res.status(403).send({ success: false, message: 'Not authorized to update' });
-              }
-            } else {
-              res.status(404).send({ success: false, message: 'Document not found' });
-            }
-          });
-        });
+      Document.findById({ _id: req.params.id }, function(err, document) {
+        var decoded = jwt.decode(req.headers['x-access-token']);
+        if (err) {
+          res.send(err);
+        } else if (document) {
+          if (decoded.role === 'admin') {
+            if (req.body.content) { document.content = req.body.content; }
+            if (req.body.title) { document.title = req.body.title; }
+            if (req.body.accessType) { document.accessType = req.body.accessType; }
+            if (req.body.genre) { document.genre = req.body.genre; }
+            document.save(function(err) {
+              if (err) res.send(err);
+              res.status(200).send({ success: true, message: 'Document successfully updated' });
+            })
+          } else {
+            res.status(403).send({ success: false, message: 'Not authorized to update' });
+          }
+        } else {
+          res.status(404).send({ success: false, message: 'document not found' });
+        }
+      });
     },
 
     delete: function(req, res) {

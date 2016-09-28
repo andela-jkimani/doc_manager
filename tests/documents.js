@@ -43,4 +43,47 @@ describe('/POST documents', () => {
         res.should.have.status(200);
       });
   });
+
+  it('should update documents', () => {
+    chai.request(server)
+      .put('/documents/57ea31a8b9b2a908071ed937')
+      .set('x-access-token', token)
+      .send({
+        content: 'My updated document'
+      })
+      .end((err, res) => {
+        if (err) return err;
+        res.should.have.status(200);
+        res.body.should.have.property('message').eql('Document successfully updated');
+      });
+  });
+
+  it('should delete documents', () => {
+    chai.request(server)
+      .delete('/documents/57ea31a8b9b2a908071ed937')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        if (err) return err;
+        res.should.have.status(200);
+        res.body.should.have.property('message').eql('Document deleted successfully');
+      });
+  });
+
+  // it('should ensure documents have published date', () => {
+  //   chai.request(server)
+  //     .post('/documents')
+  //     .set('x-access-token', token)
+  //     .send({
+  //       content: 'My updated document'
+  //     })
+  //     .end((err, res) => {
+  //       if (err) return err;
+  //       res.should.have.status(100);
+  //       res.body.should.have.property('message').eql('Document successfully deleted');
+  //     });
+  // });
+
+  it('should return all documents with the specified limit');
+  it('should return the documents with pagination');
+  it('should return all documents in the order of the published dates');
 });

@@ -80,5 +80,11 @@ describe('Users', () => {
           done();
         });
     });
+
+    it('should ensure users created are unique');
+    it('should ensure all users created have a role');
+    it('should ensure users created have a first name and a last name');
+    it('should get all users');
+    it('should get all users with a specific role');
   });
 });
