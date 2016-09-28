@@ -39,8 +39,7 @@
     role: {
       type: String,
       required: true,
-      enum: ['admin', 'user'],
-      default: 'user'
+      enum: ['admin', 'user']
     }
   });
 

@@ -1,11 +1,13 @@
 (function() {
   var Document = require('../models/documents');
+  var jwt = require('jsonwebtoken');
 
   module.exports = {
-    // Creating a document
     create: function(req, res) {
       var document = new Document();
+      var decoded = jwt.decode(req.headers['x-access-token']);
 
+      document.ownerId = decoded.id;
       document.title = req.body.title;
       document.content = req.body.content;
       document.accessLevel = req.body.accessLevel;
@@ -15,16 +17,20 @@
       document.save(function(err) {
         if (err) {
           console.log(err);
-          return res.status(404).send();
+          return res.status(404).send(err);
         }
-        return res.status(200).send();
+        return res.status(200).send({ success: true, message: 'Document created!' });
       });
     },
 
-    getAll: function(req, res, next) {
+    getAll: function(req, res) {
+      // var decoded = jwt.decode(req.headers['x-access-token']);
       Document.find(function(err, document) {
-        if (err) return next(err);
-        return res.json(document);
+        if (err) {
+          res.send(err);
+        } else {
+          res.json(document);
+        }
       });
     },
 
@@ -39,9 +45,9 @@
     },
 
     getByUser: function(req, res) {
-      Document.find({ ownerId: req.params.ownerId }, function(err, documents) {
+      Document.find({ ownerId: req.params.id }, function(err, documents) {
         if (err) {
-          res.send(err);
+          res.status(404).send(err);
         } else {
           res.send(documents);
         }
@@ -49,21 +55,55 @@
     },
 
     getOne: function(req, res) {
+      var decoded = jwt.decode(req.headers['x-access-token']);
       Document.findById({ _id: req.params.id }, function(err, document) {
+        console.log(decoded.id);
+        console.log(document.ownerId);
         if (err) {
-          res.status(404).send({ message: 'user was not found' });
+          res.send(err);
+        } else if (decoded.id !== document.ownerId && decoded.role !== 'admin') {
+          res.status(403).send({ success: false, message: 'Not authorized to view' });
+        } else if (decoded.id === document.ownerId || decoded.role === 'admin') {
+          res.status(200).send(document);
         } else {
-          res.send(document);
+          res.send({ succes: false, message: 'Document not found' });
         }
       });
     },
 
+    update: function(req, res) {
+      Document.findByIdAndUpdate({ _id: req.params.id },
+        { $set: req.body }, function(err, document) {
+          document.save(function() {
+            var decoded = jwt.decode(req.headers['x-access-token']);
+            if (err) {
+              res.send(err);
+            } else if (document) {
+              if (decoded.id === document.ownerId || decoded.role === 'admin') {
+                res.status(200).send({ success: true, message: 'Document successfully updated' });
+              } else {
+                res.status(403).send({ success: false, message: 'Not authorized to update' });
+              }
+            } else {
+              res.status(404).send({ success: false, message: 'Document not found' });
+            }
+          });
+        });
+    },
+
     delete: function(req, res) {
-      Document.findByIdAndRemove({ _id: req.params.id }, function(err) {
-        if (err) {
-          res.status(404).send(err);
+      Document.findOne({ _id: req.params.id }, function(err, document) {
+        var decoded = jwt.decode(req.headers['x-access-token']);
+        if (err) res.send(err);
+        else if (decoded.id !== document.ownerId && decoded.role !== 'admin') {
+          res.status(403).send({ success: false, message: 'Unauthorized' });
         } else {
-          res.status(200).send({ success: true, message: 'Document deleted successfully' });
+          Document.remove({ _id: req.params.id }, function() {
+            if (err) res.send(err);
+            else {
+              res.status(200).send({ success: true, message: 'Document deleted successfully' });
+            }
+          });
         }
       });
     }

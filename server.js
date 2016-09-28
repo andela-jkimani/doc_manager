@@ -8,7 +8,7 @@ var config = require('./config');
 
 app.use(morgan('dev'));
 
-mongoose.connect(config.database[app.settings.env]);
+mongoose.connect(config.database.test);
 mongoose.Promise = global.Promise;
 app.set('mySecret', config.secret);
 

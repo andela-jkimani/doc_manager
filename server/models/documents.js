@@ -8,13 +8,14 @@
   // defining the role schema
   var documentSchema = new Schema({
     ownerId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
-      ref: User.id
+      ref: 'User'
     },
     title: {
       type: String,
-      trim: true
+      trim: true,
+      unique: true
     },
     content: {
       type: String,
@@ -30,7 +31,7 @@
       type: String
     },
     createdAt: {
-      type: Date,
+      type: String,
       required: true,
       default: Date.now()
     },
