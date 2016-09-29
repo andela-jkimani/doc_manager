@@ -5,7 +5,7 @@ module.exports = function(app) {
   // app.use(Auth.authenticate, Auth.authAccess);
 
   app.route('/documents')
-    .get(Auth.authenticate, Document.getAll)
+    .get(Auth.authenticate, Document.all)
     .post(Auth.authenticate, Document.create);
 
   app.route('/documents/:id')

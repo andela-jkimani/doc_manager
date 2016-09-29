@@ -16,41 +16,23 @@
 
       document.save(function(err) {
         if (err) {
-          console.log(err);
           return res.status(404).send(err);
         }
         return res.status(200).send({ success: true, message: 'Document created!' });
       });
     },
 
-    getAll: function(req, res) {
-      // var decoded = jwt.decode(req.headers['x-access-token']);
-      Document.find(function(err, document) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.json(document);
-        }
-      });
-    },
-
-    // getByLimit: function(req, res) {
-    //   Document.find()
-    //   .limit(req.params.limit)
-    //   .exec(function(err, document) {
-    //     if (err) res.send(err);
-    //     return res.json(document);
-    //   })
-    //   ;
-    // },
-
-    getByLimit: function(req, res) {
-      var limit = req.query.limit;
-      if (limit) {
-        Document.find(function(err, documents) {
-          return res.send(documents);
+    all: function(req, res) {
+      Document.find({})
+        .sort({ createdAt: -1 })
+        .limit(Number(req.query.limit))
+        .exec(function(err, documents) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send(documents);
+          }
         });
-      }
     },
 
     getByUser: function(req, res) {

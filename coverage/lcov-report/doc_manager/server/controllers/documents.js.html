@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">47.3% </span>
+        <span class="strong">52.17% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>35/74</span>
+        <span class='fraction'>36/69</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">30.43% </span>
+        <span class="strong">34.09% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>14/46</span>
+        <span class='fraction'>15/44</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">47.37% </span>
+        <span class="strong">52.94% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>9/19</span>
+        <span class='fraction'>9/17</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">50.75% </span>
+        <span class="strong">56.45% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>34/67</span>
+        <span class='fraction'>35/62</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -159,74 +159,38 @@
 114
 115
 116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+117</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -328,42 +292,24 @@
       document.modifiedAt = req.body.modifiedAt;
 &nbsp;
       document.save(function(err) {
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (err) {
-<span class="cstat-no" title="statement not covered" >          console.log(err);</span>
-<span class="cstat-no" title="statement not covered" >          return res.status(404).send(err);</span>
+        if (err) {
+          return res.status(404).send(err);
         }
         return res.status(200).send({ success: true, message: 'Document created!' });
       });
     },
 &nbsp;
-    getAll: <span class="fstat-no" title="function not covered" >function(req, res) {</span>
-      // var decoded = jwt.decode(req.headers['x-access-token']);
-<span class="cstat-no" title="statement not covered" >      Document.find(<span class="fstat-no" title="function not covered" >function(err, document) {</span></span>
-<span class="cstat-no" title="statement not covered" >        if (err) {</span>
-<span class="cstat-no" title="statement not covered" >          res.send(err);</span>
-        } else {
-<span class="cstat-no" title="statement not covered" >          res.json(document);</span>
-        }
-      });
-    },
-&nbsp;
-    // getByLimit: function(req, res) {
-    //   Document.find()
-    //   .limit(req.params.limit)
-    //   .exec(function(err, document) {
-    //     if (err) res.send(err);
-    //     return res.json(document);
-    //   })
-    //   ;
-    // },
-&nbsp;
-    getByLimit: <span class="fstat-no" title="function not covered" >function(req, res) {</span>
-<span class="cstat-no" title="statement not covered" >      var limit = req.query.limit;</span>
-<span class="cstat-no" title="statement not covered" >      if (limit) {</span>
-<span class="cstat-no" title="statement not covered" >        Document.find(<span class="fstat-no" title="function not covered" >function(err, documents) {</span></span>
-<span class="cstat-no" title="statement not covered" >          return res.send(documents);</span>
+    all: <span class="fstat-no" title="function not covered" >function(req, res) {</span>
+<span class="cstat-no" title="statement not covered" >      Document.find({})</span>
+        .sort({ createdAt: -1 })
+        .limit(Number(req.query.limit))
+        .exec(<span class="fstat-no" title="function not covered" >function(err, documents) {</span>
+<span class="cstat-no" title="statement not covered" >          if (err) {</span>
+<span class="cstat-no" title="statement not covered" >            res.send(err);</span>
+          } else {
+<span class="cstat-no" title="statement not covered" >            res.send(documents);</span>
+          }
         });
-      }
     },
 &nbsp;
     getByUser: <span class="fstat-no" title="function not covered" >function(req, res) {</span>
@@ -451,7 +397,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Sep 29 2016 01:34:09 GMT+0300 (EAT)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Sep 29 2016 23:49:01 GMT+0300 (EAT)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

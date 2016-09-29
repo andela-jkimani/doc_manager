@@ -9,8 +9,8 @@
 
       role.save(function(err) {
         if (err) {
-          console.log(err);
-          return res.status(404).send(err);
+          // console.log(err);
+          return res.status(409).send(err);
         }
         return res.status(200).send({ success: true, message: 'Role created successfully' });
       });

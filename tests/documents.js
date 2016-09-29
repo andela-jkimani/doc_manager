@@ -37,7 +37,6 @@ describe('/POST documents', () => {
       .set('x-access-token', token)
       .send(document)
       .end((err, res) => {
-        if (err) return err;
         res.should.have.status(200);
       });
   });
@@ -50,7 +49,6 @@ describe('/POST documents', () => {
         content: 'My updated document'
       })
       .end((err, res) => {
-        if (err) return err;
         res.should.have.status(200);
         res.body.should.have.property('message').eql('Document successfully updated');
       });
@@ -61,25 +59,27 @@ describe('/POST documents', () => {
       .delete('/documents/57ea31a8b9b2a908071ed937')
       .set('x-access-token', token)
       .end((err, res) => {
-        if (err) return err;
         res.should.have.status(200);
         res.body.should.have.property('message').eql('Document deleted successfully');
       });
   });
 
-  // it('should ensure documents have published date', () => {
-  //   chai.request(server)
-  //     .post('/documents')
-  //     .set('x-access-token', token)
-  //     .send({
-  //       content: 'My updated document'
-  //     })
-  //     .end((err, res) => {
-  //       if (err) return err;
-  //       res.should.have.status(100);
-  //       res.body.should.have.property('message').eql('Document successfully deleted');
-  //     });
-  // });
+  it('should ensure documents have a published date', () => {
+    chai.request(server)
+      .post('/documents')
+      .set('x-access-token', token)
+      .send({
+        title: 'Testing',
+        content: 'My updated document',
+        accessType: 'private',
+        genre: 'fiction'
+      })
+      .end((err, res) => {
+        res.should.have.status(500);
+        res.body.should.have.property('errors');
+        res.body.errors.should.have.property('creaatedAt');
+      });
+  });
 
   it('should return all documents with the specified limit');
   it('should return the documents with pagination');
