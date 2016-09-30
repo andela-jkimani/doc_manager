@@ -8,26 +8,30 @@
   // defining the role schema
   var documentSchema = new Schema({
     ownerId: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: true,
-      ref: User.id
+      ref: 'User'
     },
     title: {
       type: String,
-      trim: true
+      trim: true,
+      unique: true
     },
     content: {
       type: String,
       trim: true
     },
-    accessLevel: {
+    accessType: {
       type: String,
       required: true,
       enum: ['private', 'public'],
       default: 'public'
     },
+    genre: {
+      type: String
+    },
     createdAt: {
-      type: Date,
+      type: String,
       required: true,
       default: Date.now()
     },

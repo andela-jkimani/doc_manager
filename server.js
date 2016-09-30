@@ -8,7 +8,7 @@ var config = require('./config');
 
 app.use(morgan('dev'));
 
-mongoose.connect(config.database);
+mongoose.connect(config.database.test);
 mongoose.Promise = global.Promise;
 app.set('mySecret', config.secret);
 
@@ -19,6 +19,8 @@ routes(app);
 
 var port = process.env.PORT || 8080;
 
-app.listen(port, function() {
+var server = app.listen(port, function() {
   console.log('API is at port ', port);
 });
+
+module.exports = server;

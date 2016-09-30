@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   var mongoose = require('mongoose');
-  // var bcrypt = require('bcrypt');
+  var bcrypt = require('bcrypt');
   // var Role = requiem2re('./roles');
 
   var Schema = mongoose.Schema;
@@ -24,28 +24,24 @@
     },
     email: {
       type: String,
-      required: true
-      // validate: {
-      //   validator: function(v) {
-      //     return (/([a-z]*)@([a-z]*)([.])([a-z]*)/g).test(v);
-      //   },
-      //   message: 'Enter a valid email!'
-      // }
+      required: true,
+      unique: true
     },
     password: {
       type: String,
       required: true
+    },
+    role: {
+      type: String,
+      required: true,
+      enum: ['admin', 'user']
     }
-    // Role: {
-    //   type: String,
-    //   ref: Role.title
-    // }
   });
 
-  // userSchema.pre('save', function(done) {
-  //   this.password = bcrypt.hashSync(this.password, 10);
-  //   done();
-  // });
+  userSchema.pre('save', function(done) {
+    this.password = bcrypt.hashSync(this.password, 10);
+    done();
+  });
 
   module.exports = mongoose.model('User', userSchema);
 })();

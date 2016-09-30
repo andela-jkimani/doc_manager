@@ -1,13 +1,20 @@
 module.exports = function(app) {
   var Document = require('../controllers/documents');
-  var User = require('../controllers/users');
+  var Auth = require('../controllers/middleware');
+  var Search = require('../controllers/search');
+
+  // app.use(Auth.authenticate, Auth.authAccess);
 
   app.route('/documents')
-    .get(User.authenticate, Document.readAll)
-    .post(User.authenticate, Document.create);
+    .get(Auth.authenticate, Document.all)
+    .post(Auth.authenticate, Document.create);
 
   app.route('/documents/:id')
-    .get(User.authenticate, Document.readOne)
-    // .put(User.authenticate, Document.update)
-    .delete(User.authenticate, Document.delete);
+    .get(Auth.authenticate, Document.getOne)
+    .put(Auth.authenticate, Document.update)
+    .delete(Auth.authenticate, Document.delete);
+
+  app.get('documents/users/:id', Auth.authenticate, Auth.authAccess, Document.getByUser);
+  app.get('/users/:user_id/documents', Auth.authenticate, Auth.authAccess, Document.getByUser);
+  app.get('/search', Auth.authenticate, Auth.authAccess, Search.search);
 };
