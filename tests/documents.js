@@ -81,7 +81,34 @@ describe('/POST documents', () => {
       });
   });
 
-  it('should return all documents with the specified limit');
-  it('should return the documents with pagination');
-  it('should return all documents in the order of the published dates');
+  it('should return all documents with the specified limit', (done) => {
+    chai.request(server)
+      .get('/documents/?limit=1')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        res.body.length.should.eql(1);
+        done();
+      });
+  });
+
+  it('should return all documents with a limit and an offset', (done) => {
+    chai.request(server)
+      .get('/documents/?limit=1&skip=2')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        res.body.length.should.eql(1);
+        res.body[0].should.have.property('_id').eql('57ea342d78f740088918f6b8');
+        done();
+      });
+  });
+
+  it('should return all documents in the order of the published dates', () => {
+    chai.request(server)
+      .get('/documents')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        res.body[0].should.have.property('_id').eql('57ea33374031bd086d7d3809');
+        res.body[3].should.have.property('_id').eql('57ea326a3f2e3408554e8f5a');
+      });
+  });
 });

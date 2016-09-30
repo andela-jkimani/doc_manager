@@ -62,6 +62,18 @@ module.exports = {
     });
   },
 
+  findByRole: function(req, res) {
+    User.find({})
+    .limit(Number(req.query.limit))
+    .exec(function(err, users) {
+      res.send(users.filter(function(user) {
+        if (user.role.title === req.query.role) {
+          return user;
+        }
+      }));
+    });
+  },
+
   getByLimit: function(req, res) {
     User.find()
     .limit(req.params.limit)
@@ -82,9 +94,6 @@ module.exports = {
         res.status(404).send({ message: 'User was not found' });
       }
     });
-    // var decoded = jwt.decode(req.headers['x-access-token']);
-    // console.log(decoded.role);
-    // console.log(req.params.id);
   },
 
   update: function(req, res) {
@@ -127,13 +136,4 @@ module.exports = {
       }
     });
   }
-
-  // logout: function(req, res) {
-  //   delete req.decoded;
-  //   if (req.decoded) {
-  //     res.status(500).send({ success: false, message: 'Could not log out' });
-  //   } else {
-  //     res.status(200).send({ success: true, message: 'Successfully logged out' });
-  //   }
-  // }
 };

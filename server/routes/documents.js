@@ -1,6 +1,7 @@
 module.exports = function(app) {
   var Document = require('../controllers/documents');
   var Auth = require('../controllers/middleware');
+  var Search = require('../controllers/search');
 
   // app.use(Auth.authenticate, Auth.authAccess);
 
@@ -14,6 +15,6 @@ module.exports = function(app) {
     .delete(Auth.authenticate, Document.delete);
 
   app.get('documents/users/:id', Auth.authenticate, Auth.authAccess, Document.getByUser);
-  app.get('/users/:user_id/documents', Document.getByUser);
-  // app.get('/search', Document.getByGenre);
+  app.get('/users/:user_id/documents', Auth.authenticate, Auth.authAccess, Document.getByUser);
+  app.get('/search', Auth.authenticate, Auth.authAccess, Search.search);
 };

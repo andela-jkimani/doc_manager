@@ -25,7 +25,8 @@
     all: function(req, res) {
       Document.find({})
         .sort({ createdAt: -1 })
-        .limit(Number(req.query.limit))
+        .skip(Number(req.query.skip) || 0)
+        .limit(Number(req.query.limit) || 0)
         .exec(function(err, documents) {
           if (err) {
             res.send(err);
@@ -47,6 +48,27 @@
 
     getByGenre: function(req, res) {
       Document.find({ genre: req.params.genre }, function(err, documents) {
+        if (err) {
+          res.status(404).send(err);
+        } else {
+          res.send(documents);
+        }
+      });
+    },
+
+    getByDate: function(req, res) {
+      Document.find({ createdAt: req.params.date }, function(err, documents) {
+        if (err) {
+          res.status(404).send(err);
+        } else {
+          res.send(documents);
+        }
+      })
+      .limit(Number(req.query.limit) || 0);
+    },
+
+    getByAccessLevel: function(req, res) {
+      Document.find({ accessLevel: req.params.access }, function(err, documents) {
         if (err) {
           res.status(404).send(err);
         } else {

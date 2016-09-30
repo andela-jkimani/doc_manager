@@ -23,23 +23,6 @@ describe('Users', () => {
       });
   });
 
-// // Testing the GET route
-//   describe('/GET users', () => {
-//     it('it should GET no users when database is empty', (done) => {
-//       // User.remove({}, () => {
-//       //   console.log('All users removed');
-//       // });
-//       chai.request(server)
-//           .get('/users')
-//           .end((err, res) => {
-//             res.should.have.status(200);
-//             res.body.should.be.a('array');
-//             res.body.length.should.be.eql(0);
-//             done();
-//           });
-//     });
-//   });
-
   describe('/POST', () => {
     it('should not POST a user with a missing parameter', (done) => {
       var user = {
@@ -126,7 +109,6 @@ describe('Users', () => {
         .post('/users')
         .send(user)
         .end((err, res) => {
-          // console.log(res.body);
           res.should.have.status(500);
           res.body.should.have.property('errors');
         });
