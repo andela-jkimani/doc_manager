@@ -5,3 +5,6 @@ module.exports = {
     test: 'mongodb://localhost:27017/doc_manager_test'
   }
 };
+
+
+// "test": "NODE_ENV=test mocha tests",

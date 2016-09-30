@@ -62,6 +62,18 @@ module.exports = {
     });
   },
 
+  findByRole: function(req, res) {
+    User.find({})
+    .limit(Number(req.query.limit))
+    .exec(function(err, users) {
+      res.send(users.filter(function(user) {
+        if (user.role.title === req.query.role) {
+          return user;
+        }
+      }));
+    });
+  },
+
   getByLimit: function(req, res) {
     User.find()
     .limit(req.params.limit)
@@ -82,39 +94,46 @@ module.exports = {
         res.status(404).send({ message: 'User was not found' });
       }
     });
-    // var decoded = jwt.decode(req.headers['x-access-token']);
-    // console.log(decoded.role);
-    // console.log(req.params.id);
   },
 
   update: function(req, res) {
-    User.findByIdAndUpdate({ _id: req.params.id },
-      { $set: req.body }, function(err, user) {
-        user.save(function() {
-          if (err) {
-            res.send(err);
-          } else if (user) {
+    User.findById({ _id: req.params.id }, function(err, user) {
+      var decoded = jwt.decode(req.headers['x-access-token']);
+      if (err) {
+        res.send(err);
+      } else if (user) {
+        if (decoded.role === 'admin') {
+          if (req.body.email) { user.email = req.body.email; }
+          if (req.body.firstName) { user.firstName = req.body.firstName; }
+          if (req.body.lastName) { user.lastName = req.body.lastName; }
+          if (req.body.password) { user.password = req.body.password; }
+          user.save(function() {
+            if (err) res.send(err);
             res.status(200).send({ success: true, message: 'User successfully updated' });
-          } else {
-            res.status(404).send({ success: false, message: 'User not found' });
-          }
-        });
-      });
-  },
-
-  delete: function(req, res, next) {
-    User.findByIdAndRemove(req.body.id, req.body, function(err, user) {
-      if (err) return next(err);
-      return res.json(user);
+          });
+        } else {
+          res.status(403).send({ success: false, message: 'Not authorized to update' });
+        }
+      } else {
+        res.status(404).send({ success: false, message: 'User not found' });
+      }
     });
   },
 
-  logout: function(req, res) {
-    delete req.decoded;
-    if (req.decoded) {
-      res.status(500).send({ success: false, message: 'Could not log out' });
-    } else {
-      res.status(200).send({ success: true, message: 'Successfully logged out' });
-    }
+  delete: function(req, res) {
+    User.findOne({ _id: req.params.id }, function(err) {
+      var decoded = jwt.decode(req.headers['x-access-token']);
+      if (err) res.send(err);
+      else if (decoded.role !== 'admin') {
+        res.status(403).send({ success: false, message: 'Unauthorized' });
+      } else {
+        User.remove({ _id: req.params.id }, function() {
+          if (err) res.send(err);
+          else {
+            res.status(200).send({ success: true, message: 'User deleted successfully' });
+          }
+        });
+      }
+    });
   }
 };

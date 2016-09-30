@@ -21,8 +21,6 @@ mongoose.connection.on('connected', function(err) {
   if (err) {
     console.log(err);
   } else {
-
-
     Document.create(documentData, function() {
       if (err) {
         console.log('error: ', err);
@@ -48,7 +46,7 @@ mongoose.connection.on('connected', function(err) {
       process.exit();
     });
 
-    // db.close(true, function() {
+    // mongoose.connection.db.close(true, function() {
     //   console.log('Database seeded');
     // });
   }

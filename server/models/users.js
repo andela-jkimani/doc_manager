@@ -24,13 +24,8 @@
     },
     email: {
       type: String,
-      required: true
-      // validate: {
-      //   validator: function(v) {
-      //     return (/([a-z]*)@([a-z]*)([.])([a-z]*)/g).test(v);
-      //   },
-      //   message: 'Enter a valid email!'
-      // }
+      required: true,
+      unique: true
     },
     password: {
       type: String,

@@ -1,12 +1,11 @@
-var mongoose = require('mongoose');
 var User = require('../server/models/users');
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var server = require('../server');
 var should = chai.should();
+var request = require('supertest');
 
 chai.use(chaiHttp);
-
 describe('Users', () => {
   beforeEach((done) => {
     chai.request(server)
@@ -15,30 +14,13 @@ describe('Users', () => {
         username: 'sylvia',
         password: 'sylvia'
       })
-      .end((err, res) => {
+      .end((err) => {
         if (err) {
           console.log(err);
         }
-        token = res.body.token;
+        // token = res.body.token;
         done();
       });
-  });
-
-// Testing the GET route
-  describe('/GET users', () => {
-    it('it should GET no users when database is empty', (done) => {
-      User.remove({}, () => {
-        console.log('All users removed');
-      });
-      chai.request(server)
-          .get('/users')
-          .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('array');
-            res.body.length.should.be.eql(0);
-            done();
-          });
-    });
   });
 
   describe('/POST', () => {
@@ -76,8 +58,68 @@ describe('Users', () => {
         .post('/users')
         .send(user)
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(409);
           done();
+        });
+    });
+
+    it('should ensure a new user created is unique', () => {
+      var user = {
+        username: 'jacky',
+        firstName: 'jacky',
+        lastName: 'kimani',
+        email: 'jacky@gmail.com',
+        password: 'jacky',
+        role: 'user'
+      };
+      chai.request(server)
+        .post('/users')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(409);
+          res.body.should.have.property('message').eql('User already exists');
+        });
+    });
+
+    it('should ensure all users created have a role', () => {
+      var user = {
+        username: 'jacky',
+        firstName: 'jacky',
+        lastName: 'kimani',
+        email: 'jacky@gmail.com',
+        password: 'jacky'
+      };
+      chai.request(server)
+        .post('/users')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(500);
+          res.body.should.have.property('errors');
+        });
+    });
+
+    it('should ensure users created have a first name and a last name', () => {
+      var user = {
+        username: 'jacky',
+        email: 'jacky@gmail.com',
+        password: 'jacky',
+        role: 'user'
+      };
+      chai.request(server)
+        .post('/users')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(500);
+          res.body.should.have.property('errors');
+        });
+    });
+
+    it('should get all users', () => {
+      chai.request(server)
+        .get('/users')
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.length.should.be.eql(5);
         });
     });
   });

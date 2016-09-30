@@ -1,4 +1,3 @@
-var mongoose = require('mongoose');
 var Role = require('../server/models/roles');
 var chai = require('chai');
 var chaiHttp = require('chai-http');
@@ -46,7 +45,7 @@ describe('Roles', () => {
         });
     });
 
-    it('should return all roles in database', () => {
+    it('should return all roles in the database', () => {
       chai.request(server)
         .get('/roles')
         .set('x-access-token', token)
@@ -69,7 +68,7 @@ describe('Roles', () => {
         })
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.be.a('array');
+          res.body.should.be.a('object');
           res.body.should.have.property('message').eql('Role created successfully');
         });
     });
@@ -82,7 +81,7 @@ describe('Roles', () => {
           title: 'admin'
         })
         .end((err, res) => {
-          res.should.have.status(404);
+          res.should.have.status(409);
           res.body.should.have.property('errors');
         });
     });
