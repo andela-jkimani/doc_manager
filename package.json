@@ -5,8 +5,7 @@
   "main": "server.js",
   "scripts": {
     "pretest": "node server/seeds/seed.js",
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha tests && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "test": "NODE_ENV=test mocha tests",
     "start": "nodemon server.js"
   },
   "repository": {

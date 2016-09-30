@@ -77,7 +77,7 @@ describe('/POST documents', () => {
       .end((err, res) => {
         res.should.have.status(500);
         res.body.should.have.property('errors');
-        res.body.errors.should.have.property('creaatedAt');
+        res.body.errors.should.have.property('createdAt');
       });
   });
 
@@ -109,6 +109,46 @@ describe('/POST documents', () => {
       .end((err, res) => {
         res.body[0].should.have.property('_id').eql('57ea33374031bd086d7d3809');
         res.body[3].should.have.property('_id').eql('57ea326a3f2e3408554e8f5a');
+      });
+  });
+
+  it('should return all documents created on a certain date with a limit', () => {
+    chai.request(server)
+      .get('/search?date=12-02-1993')
+      .set('x-access-token', token)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body[0].should.have.property('_id').eql('57ea326a3f2e3408554e8f5a');
+      });
+  });
+});
+
+describe('Owner test', () => {
+  var token;
+
+  beforeEach((done) => {
+    chai.request(server)
+      .post('/users/login')
+      .send({
+        username: 'jacky',
+        password: 'jacky'
+      })
+      .end((err, res) => {
+        if (err) {
+          console.log(err);
+        }
+        token = res.body.token;
+        done();
+      });
+  });
+
+  it('should ensure a user cannot get documents without access', (done) => {
+    chai.request(server)
+      .get('/documents/57ea326a3f2e3408554e8f5a')
+      .set('x-access-token', token)
+      .end(function(err, res) {
+        res.body.should.have.property('message').eql('Not authorized to view');
+        done();
       });
   });
 });

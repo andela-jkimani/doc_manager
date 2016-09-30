@@ -118,19 +118,9 @@ describe('Users', () => {
       chai.request(server)
         .get('/users')
         .end((err, res) => {
-          // console.log(res.body);
           res.should.have.status(200);
           res.body.length.should.be.eql(5);
         });
-    });
-
-    it('should get all users with a specific role', () => {
-      // chai.request(server)
-      //   .get('/users/')
-      //   .end((err, res) => {
-      //     res.should.have.status(200);
-      //     res.body.length.should.be.eql(5);
-      //   });
     });
   });
 });
