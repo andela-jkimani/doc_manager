@@ -1,9 +1,6 @@
-var User = require('../server/models/users');
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var server = require('../server');
-var should = chai.should();
-var request = require('supertest');
 
 chai.use(chaiHttp);
 var token;
