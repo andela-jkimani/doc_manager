@@ -59,12 +59,10 @@ describe('Users', () => {
         .post('/users')
         .send(user)
         .end((err, res) => {
-          // console.log(req.body);
-          // console.log(res.body);
           res.should.have.status(201);
           res.body.user.should.have.property('name');
           res.body.user.should.have.property('role').eql('user' || 'admin');
-          // res.body.should.have.property('role').eql(req.body.role);
+          res.body.user.should.have.property('role').eql(user.role);
           done();
         });
     });

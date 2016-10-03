@@ -1,6 +1,5 @@
 (function() {
   var Document = require('../models/documents');
-  var jwt = require('jsonwebtoken');
 
   module.exports = {
     create: function(req, res) {
@@ -15,7 +14,11 @@
 
       document.save(function(err) {
         if (err) {
-          return res.status(404).send(err);
+          if (err.code === 11000) {
+            res.status(409).send({ message: 'Document title already exists' });
+          } else {
+            res.status(500).send(err);
+          }
         }
         return res.status(201).send({ success: true, message: 'Document created!' });
       });
@@ -28,9 +31,9 @@
         .limit(Number(req.query.limit) || 0)
         .exec(function(err, documents) {
           if (err) {
-            res.send(err);
+            res.status(500).send(err);
           } else {
-            res.send(documents);
+            res.status(200).send(documents);
           }
         });
     },
@@ -38,9 +41,9 @@
     getByUser: function(req, res) {
       Document.find({ ownerId: req.params.user_id }, function(err, documents) {
         if (err) {
-          res.status(404).send(err);
+          res.status(500).send(err);
         } else {
-          res.send(documents);
+          res.status(200).send(documents);
         }
       });
     },
@@ -48,9 +51,9 @@
     getByGenre: function(req, res) {
       Document.find({ genre: req.params.genre }, function(err, documents) {
         if (err) {
-          res.status(404).send(err);
+          res.status(500).send(err);
         } else {
-          res.send(documents);
+          res.status(200).send(documents);
         }
       });
     },
@@ -58,9 +61,9 @@
     getByDate: function(req, res) {
       Document.find({ createdAt: req.params.date }, function(err, documents) {
         if (err) {
-          res.status(404).send(err);
+          res.status(500).send(err);
         } else {
-          res.send(documents);
+          res.status(200).send(documents);
         }
       })
       .limit(Number(req.query.limit) || 0);
@@ -69,25 +72,23 @@
     getByAccessLevel: function(req, res) {
       Document.find({ accessLevel: req.params.access }, function(err, documents) {
         if (err) {
-          res.status(404).send(err);
+          res.status(500).send(err);
         } else {
-          res.send(documents);
+          res.status(200).send(documents);
         }
       });
     },
 
     getOne: function(req, res) {
       Document.findById({ _id: req.params.id }, function(err, document) {
-        if (err) {
-          res.send(err);
-        } else if (document === null) {
-          res.send({ success: false, message: 'Not found' });
+        if (document === null) {
+          res.status(404).send({ success: false, message: 'Not found' });
         } else if (req.user.id !== document.ownerId && req.user.role !== 'admin') {
           res.status(403).send({ success: false, message: 'Not authorized to view' });
         } else if (req.user.id === document.ownerId || req.user.role === 'admin') {
           res.status(200).send(document);
         } else {
-          res.send({ succes: false, message: 'Document not found' });
+          res.status(500).send(err);
         }
       });
     },
@@ -110,7 +111,7 @@
             res.status(403).send({ success: false, message: 'Not authorized to update' });
           }
         } else {
-          res.status(404).send({ success: false, message: 'document not found' });
+          res.status(500).send({ success: false, message: 'document not found' });
         }
       });
     },

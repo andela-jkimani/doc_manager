@@ -20,7 +20,7 @@ module.exports = {
         }
       });
     } else {
-      res.status(403).send({
+      res.status(401).send({
         success: false,
         message: 'No token provided'
       });
