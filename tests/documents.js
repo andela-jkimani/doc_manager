@@ -99,6 +99,16 @@ describe('Documents', () => {
         });
     });
 
+    it('should get documents by users', () => {
+      chai.request(server)
+        .get('/users/57e936807700ef1f31b3f8e0/documents')
+        .set('x-access-token', token)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body[0].should.have.property('title').eql('Hello World');
+        });
+    });
+
     it('should return all documents with the specified limit', (done) => {
       chai.request(server)
         .get('/documents/?limit=1')
