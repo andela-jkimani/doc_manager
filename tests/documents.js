@@ -66,18 +66,11 @@ describe('/POST documents', () => {
 
   it('should ensure documents have a published date', () => {
     chai.request(server)
-      .post('/documents')
+      .get('/documents')
       .set('x-access-token', token)
-      .send({
-        title: 'Testing',
-        content: 'My updated document',
-        accessType: 'private',
-        genre: 'fiction'
-      })
       .end((err, res) => {
-        res.should.have.status(500);
-        res.body.should.have.property('errors');
-        res.body.errors.should.have.property('createdAt');
+        res.should.have.status(200);
+        res.body[0].should.have.property('createdAt');
       });
   });
 

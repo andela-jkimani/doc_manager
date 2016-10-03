@@ -9,10 +9,13 @@
 
       role.save(function(err) {
         if (err) {
-          // console.log(err);
-          return res.status(409).send(err);
+          if (err.code === 11000) {
+            res.status(409).send({ success: false, message: 'Role already exists' });
+          } else {
+            return res.status(409).send(err);
+          }
         }
-        return res.status(200).send({ success: true, message: 'Role created successfully' });
+        return res.status(201).send({ success: true, message: 'Role created successfully' });
       });
     },
 

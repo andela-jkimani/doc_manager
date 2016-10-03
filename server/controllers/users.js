@@ -20,7 +20,7 @@ module.exports = {
           res.status(500).send(err);
         }
       } else {
-        res.status(200).send({ message: 'User created' });
+        res.status(201).send({ user });
       }
     });
   },
@@ -56,9 +56,17 @@ module.exports = {
   },
 
   getAll: function(req, res) {
+    var decoded = jwt.decode(req.headers['x-access-token']);
     User.find(function(err, users) {
-      if (err) return err;
-      return res.json(users);
+      if (err) {
+        res.send(err);
+      } else if (decoded.role !== 'admin') {
+        res.status(403).send({ success: false });
+      } else if (decoded.role === 'admin') {
+        res.status(200).send(users);
+      } else {
+        res.send({ succes: false, message: 'Document not found' });
+      }
     });
   },
 
