@@ -59,10 +59,12 @@ describe('Users', () => {
         .post('/users')
         .send(user)
         .end((err, res) => {
+          // console.log(req.body);
           // console.log(res.body);
           res.should.have.status(201);
           res.body.user.should.have.property('name');
           res.body.user.should.have.property('role').eql('user' || 'admin');
+          // res.body.should.have.property('role').eql(req.body.role);
           done();
         });
     });
@@ -118,13 +120,15 @@ describe('Users', () => {
         });
     });
 
-    it('should get all users', () => {
-      chai.request(server)
-        .get('/users')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.length.should.be.eql(5);
-        });
+    describe('/GET', () => {
+      it('should get all users', () => {
+        chai.request(server)
+          .get('/users')
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.length.should.be.eql(5);
+          });
+      });
     });
   });
 });

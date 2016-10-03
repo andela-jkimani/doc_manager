@@ -91,6 +91,7 @@ describe('/POST documents', () => {
       .end((err, res) => {
         res.body.length.should.eql(1);
         res.body[0].should.have.property('_id').eql('57ea342d78f740088918f6b8');
+        res.body[0].should.have.property('createdAt');
         done();
       });
   });
@@ -102,6 +103,9 @@ describe('/POST documents', () => {
       .end((err, res) => {
         res.body[0].should.have.property('_id').eql('57ea33374031bd086d7d3809');
         res.body[3].should.have.property('_id').eql('57ea326a3f2e3408554e8f5a');
+        res.body[0].should.have.property('createdAt').above(res.body[1].createdAt);
+        res.body[1].should.have.property('createdAt').above(res.body[2].createdAt);
+        res.body[2].should.have.property('createdAt').above(res.body[3].createdAt);
       });
   });
 
