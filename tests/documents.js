@@ -41,6 +41,24 @@ describe('Documents', () => {
           res.should.have.status(201);
         });
     });
+
+    it('should not post documents with the same title', () => {
+      var document = {
+        title: 'Holla',
+        content: 'Just saying hi',
+        accessType: 'public',
+        genre: 'reality',
+        createdAt: '20-2-1203'
+      };
+      chai.request(server)
+        .post('/documents')
+        .set('x-access-token', token)
+        .send(document)
+        .end((err, res) => {
+          res.should.have.status(409);
+          res.body.should.have.property('message').eql('Document title already exists');
+        });
+    });
   });
 
   describe('/PUT documents', () => {
