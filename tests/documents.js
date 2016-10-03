@@ -38,7 +38,7 @@ describe('Documents', () => {
         .set('x-access-token', token)
         .send(document)
         .end((err, res) => {
-          res.should.have.status(200);
+          res.should.have.status(201);
         });
     });
   });

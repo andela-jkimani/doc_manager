@@ -56,13 +56,12 @@ module.exports = {
   },
 
   getAll: function(req, res) {
-    var decoded = jwt.decode(req.headers['x-access-token']);
     User.find(function(err, users) {
       if (err) {
         res.send(err);
-      } else if (decoded.role !== 'admin') {
+      } else if (req.user.role !== 'admin') {
         res.status(403).send({ success: false });
-      } else if (decoded.role === 'admin') {
+      } else if (req.user.role === 'admin') {
         res.status(200).send(users);
       } else {
         res.send({ succes: false, message: 'Document not found' });
@@ -106,11 +105,10 @@ module.exports = {
 
   update: function(req, res) {
     User.findById({ _id: req.params.id }, function(err, user) {
-      var decoded = jwt.decode(req.headers['x-access-token']);
       if (err) {
         res.send(err);
       } else if (user) {
-        if (decoded.role === 'admin') {
+        if (req.user.role === 'admin') {
           if (req.body.email) { user.email = req.body.email; }
           if (req.body.firstName) { user.firstName = req.body.firstName; }
           if (req.body.lastName) { user.lastName = req.body.lastName; }
@@ -130,9 +128,8 @@ module.exports = {
 
   delete: function(req, res) {
     User.findOne({ _id: req.params.id }, function(err) {
-      var decoded = jwt.decode(req.headers['x-access-token']);
       if (err) res.send(err);
-      else if (decoded.role !== 'admin') {
+      else if (req.user.role !== 'admin') {
         res.status(403).send({ success: false, message: 'Unauthorized' });
       } else {
         User.remove({ _id: req.params.id }, function() {

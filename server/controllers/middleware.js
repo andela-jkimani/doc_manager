@@ -11,7 +11,11 @@ module.exports = {
         if (err) {
           res.json({ success: false, message: 'Token authentication failed' });
         } else {
-          res.decoded = decoded;
+          req.user = {
+            id: decoded.id,
+            username: decoded.username,
+            role: decoded.role
+          };
           next();
         }
       });
@@ -24,8 +28,7 @@ module.exports = {
   },
 
   authAccess: function(req, res, next) {
-    var decoded = jwt.decode(req.headers['x-access-token']);
-    if (decoded.role === 'admin' || decoded.id === req.params.id) {
+    if (req.user.role === 'admin' || req.user.id === req.params.id) {
       next();
     } else {
       res.status(403).send({ success: false, message: 'You do not have permission' });
