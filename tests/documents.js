@@ -39,6 +39,7 @@ describe('Documents', () => {
         .send(document)
         .end((err, res) => {
           res.should.have.status(201);
+          res.body.should.have.property('message').eql('Document created!');
         });
     });
 
@@ -114,6 +115,7 @@ describe('Documents', () => {
         .get('/documents/?limit=1')
         .set('x-access-token', token)
         .end((err, res) => {
+          res.should.have.status(200);
           res.body.length.should.eql(1);
           done();
         });
@@ -124,6 +126,7 @@ describe('Documents', () => {
         .get('/documents/?limit=1&skip=2')
         .set('x-access-token', token)
         .end((err, res) => {
+          res.should.have.status(200);
           res.body.length.should.eql(1);
           res.body[0].should.have.property('_id').eql('57ea342d78f740088918f6b8');
           res.body[0].should.have.property('createdAt');
@@ -136,6 +139,7 @@ describe('Documents', () => {
         .get('/documents')
         .set('x-access-token', token)
         .end((err, res) => {
+          res.should.have.status(200);
           res.body[0].should.have.property('_id').eql('57ea33374031bd086d7d3809');
           res.body[3].should.have.property('_id').eql('57ea326a3f2e3408554e8f5a');
           res.body[0].should.have.property('createdAt').above(res.body[1].createdAt);
@@ -180,6 +184,7 @@ describe('Owner test', () => {
       .get('/documents/57ea326a3f2e3408554e8f5a')
       .set('x-access-token', token)
       .end(function(err, res) {
+        res.should.have.status(403);
         res.body.should.have.property('message').eql('Not authorized to view');
         done();
       });

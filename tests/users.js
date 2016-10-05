@@ -1,6 +1,8 @@
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var server = require('../server');
+var should = chai.should();
+
 
 chai.use(chaiHttp);
 var token;
@@ -43,7 +45,7 @@ describe('Users', () => {
        });
     });
 
-    it('should create a user', (done) => {
+    it('should create a user with a valid role and names', (done) => {
       var user = {
         username: 'risper',
         firstName: 'risper',
@@ -60,6 +62,8 @@ describe('Users', () => {
           res.body.user.should.have.property('name');
           res.body.user.should.have.property('role').eql('user' || 'admin');
           res.body.user.should.have.property('role').eql(user.role);
+          res.body.user.name.should.have.property('firstName').eql(user.firstName);
+          res.body.user.name.should.have.property('lastName').eql(user.lastName);
           done();
         });
     });
