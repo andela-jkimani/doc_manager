@@ -76,7 +76,7 @@ module.exports = {
       if (err) res.status(500).send(err);
       res.status(200).send(users.filter(function(user) {
         if (user.role.title === req.query.role) {
-          return user;
+          return users;
         }
       }));
     });
