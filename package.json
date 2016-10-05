@@ -1,6 +1,10 @@
 {
   "name": "doc_manager",
   "version": "1.0.0",
+  "engines": {
+    "node": "6.3.1",
+    "npm": "3.10.5"
+  },
   "description": "Document management system",
   "main": "server.js",
   "scripts": {

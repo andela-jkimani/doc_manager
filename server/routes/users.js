@@ -3,7 +3,7 @@ module.exports = function(app) {
   var Auth = require('../controllers/middleware');
 
   app.route('/users')
-    .get(User.getAll)
+    .get(Auth.authenticate, Auth.authAccess, User.getAll)
     .post(User.signup);
 
   app.post('/users/login', User.login);

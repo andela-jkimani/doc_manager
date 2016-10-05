@@ -20,7 +20,7 @@ module.exports = {
           res.status(500).send(err);
         }
       } else {
-        res.status(200).send({ message: 'User created' });
+        res.status(201).send({ user });
       }
     });
   },
@@ -30,7 +30,7 @@ module.exports = {
       username: req.body.username
     }, function(err, user) {
       if (err) {
-        res.send(err);
+        res.status(500).send(err);
       } else if (!user) {
         res.send({ success: false, message: 'User not found' });
       } else {
@@ -57,8 +57,15 @@ module.exports = {
 
   getAll: function(req, res) {
     User.find(function(err, users) {
-      if (err) return err;
-      return res.json(users);
+      if (err) {
+        res.status(500).send(err);
+      } else if (req.user.role !== 'admin') {
+        res.status(403).send({ success: false });
+      } else if (req.user.role === 'admin') {
+        res.status(200).send(users);
+      } else {
+        res.send({ succes: false, message: 'Users not found' });
+      }
     });
   },
 
@@ -66,7 +73,8 @@ module.exports = {
     User.find({})
     .limit(Number(req.query.limit))
     .exec(function(err, users) {
-      res.send(users.filter(function(user) {
+      if (err) res.status(500).send(err);
+      res.status(200).send(users.filter(function(user) {
         if (user.role.title === req.query.role) {
           return user;
         }
@@ -79,17 +87,17 @@ module.exports = {
     .limit(req.params.limit)
     // .sort('createdAt': -1)
     .exec(function(err, users) {
-      if (err) res.send(err);
-      return res.json(users);
+      if (err) res.status(500).send(err);
+      return res.status(200).send(users);
     });
   },
 
   getOne: function(req, res) {
     User.findById({ _id: req.params.id }, function(err, user) {
       if (err) {
-        res.send(err);
+        res.status(500).send(err);
       } else if (user) {
-        res.send(user);
+        res.status(200).send(user);
       } else {
         res.status(404).send({ message: 'User was not found' });
       }
@@ -98,11 +106,10 @@ module.exports = {
 
   update: function(req, res) {
     User.findById({ _id: req.params.id }, function(err, user) {
-      var decoded = jwt.decode(req.headers['x-access-token']);
       if (err) {
-        res.send(err);
+        res.status(500).send(err);
       } else if (user) {
-        if (decoded.role === 'admin') {
+        if (req.user.role === 'admin') {
           if (req.body.email) { user.email = req.body.email; }
           if (req.body.firstName) { user.firstName = req.body.firstName; }
           if (req.body.lastName) { user.lastName = req.body.lastName; }
@@ -122,13 +129,12 @@ module.exports = {
 
   delete: function(req, res) {
     User.findOne({ _id: req.params.id }, function(err) {
-      var decoded = jwt.decode(req.headers['x-access-token']);
       if (err) res.send(err);
-      else if (decoded.role !== 'admin') {
+      else if (req.user.role !== 'admin') {
         res.status(403).send({ success: false, message: 'Unauthorized' });
       } else {
         User.remove({ _id: req.params.id }, function() {
-          if (err) res.send(err);
+          if (err) res.status(500).send(err);
           else {
             res.status(200).send({ success: true, message: 'User deleted successfully' });
           }
