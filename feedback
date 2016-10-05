@@ -1,5 +1,0 @@
-1. Ensure the role is valid
-2. Ensure firstname and lastname are the same on res and req
-==3. Authenticate user to access all users in db and test
-==4. Test documents that are on db for date instead of while posting
-==5. Test for greater than dates. Check date in req and res
