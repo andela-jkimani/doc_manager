@@ -2,7 +2,6 @@
   'use strict';
   var mongoose = require('mongoose');
   var bcrypt = require('bcrypt');
-  // var Role = requiem2re('./roles');
 
   var Schema = mongoose.Schema;
 

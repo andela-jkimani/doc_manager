@@ -1,11 +1,11 @@
-var User = require('../server/models/users');
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var server = require('../server');
 var should = chai.should();
-var request = require('supertest');
+
 
 chai.use(chaiHttp);
+var token;
 describe('Users', () => {
   beforeEach((done) => {
     chai.request(server)
@@ -14,11 +14,11 @@ describe('Users', () => {
         username: 'sylvia',
         password: 'sylvia'
       })
-      .end((err) => {
+      .end((err, res) => {
         if (err) {
           console.log(err);
         }
-        // token = res.body.token;
+        token = res.body.token;
         done();
       });
   });
@@ -45,20 +45,25 @@ describe('Users', () => {
        });
     });
 
-    it('should create a user', (done) => {
+    it('should create a user with a valid role and names', (done) => {
       var user = {
-        username: 'jkggie',
-        firstName: 'maggie',
+        username: 'risper',
+        firstName: 'risper',
         lastName: 'kimani',
-        email: 'maggie@gmail.com',
-        password: 'maggie',
+        email: 'risper@gmail.com',
+        password: 'risper',
         role: 'user'
       };
       chai.request(server)
         .post('/users')
         .send(user)
         .end((err, res) => {
-          res.should.have.status(409);
+          res.should.have.status(201);
+          res.body.user.should.have.property('name');
+          res.body.user.should.have.property('role').eql('user' || 'admin');
+          res.body.user.should.have.property('role').eql(user.role);
+          res.body.user.name.should.have.property('firstName').eql(user.firstName);
+          res.body.user.name.should.have.property('lastName').eql(user.lastName);
           done();
         });
     });
@@ -114,13 +119,44 @@ describe('Users', () => {
         });
     });
 
-    it('should get all users', () => {
-      chai.request(server)
-        .get('/users')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.length.should.be.eql(5);
-        });
+    describe('/GET', () => {
+      it('should get all users', () => {
+        chai.request(server)
+          .get('/users')
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.length.should.be.eql(5);
+          });
+      });
     });
+  });
+});
+
+describe('Authorization test', () => {
+  beforeEach((done) => {
+    chai.request(server)
+      .post('/users/login')
+      .send({
+        username: 'jacky',
+        password: 'jacky'
+      })
+      .end((err, res) => {
+        if (err) {
+          console.log(err);
+        }
+        token = res.body.token;
+        done();
+      });
+  });
+
+  it('should ensure a user cannot get users without being an admin', (done) => {
+    chai.request(server)
+      .get('/users')
+      .set('x-access-token', token)
+      .end(function(err, res) {
+        res.should.have.status(403);
+        res.body.should.have.property('message').eql('You do not have permission');
+        done();
+      });
   });
 });

@@ -1,11 +1,9 @@
 (function() {
   'use strict';
   var mongoose = require('mongoose');
-  var User = require('./users');
 
   var Schema = mongoose.Schema;
 
-  // defining the role schema
   var documentSchema = new Schema({
     ownerId: {
       type: Schema.Types.ObjectId,

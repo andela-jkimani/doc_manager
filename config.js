@@ -1,10 +1,18 @@
 module.exports = {
-  secret: 'jacky',
-  database: {
-    development: 'mongodb://localhost:27017/doc_manager',
-    test: 'mongodb://localhost:27017/doc_manager_test'
+  development: {
+    secret: 'jacky',
+    database: 'mongodb://localhost:27017/doc_manager'
+  },
+  staging: {
+    secret: 'jacky',
+    database: 'mongodb://localhost:27017/doc_manager'
+  },
+  production: {
+    secret: 'jacky',
+    database: 'mongodb://localhost:27017/doc_manager'
+  },
+  test: {
+    secret: 'jacky',
+    database: 'mongodb://localhost:27017/doc_manager_test'
   }
 };
-
-
-// "test": "NODE_ENV=test mocha tests",
