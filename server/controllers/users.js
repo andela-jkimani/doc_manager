@@ -41,7 +41,7 @@ module.exports = {
             res.send({ success: false, message: 'Incorrect password' });
           } else {
             var token = jwt.sign({ id: user.id, username: user.username, role: user.role },
-              config.secret, {
+              config.test.secret, {
                 expiresIn: 1440 // 24 hours
               });
             res.json({

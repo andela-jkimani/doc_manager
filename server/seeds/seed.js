@@ -7,7 +7,7 @@ var Document = require('../models/documents');
 var Role = require('../models/roles');
 var config = require('../../config');
 
-mongoose.connect(config.database.test, function(err, db) {
+mongoose.connect(config.test.database, function(err, db) {
   if (err) {
     console.log(err);
   } else {
@@ -45,9 +45,5 @@ mongoose.connection.on('connected', function(err) {
       }
       process.exit();
     });
-
-    // mongoose.connection.db.close(true, function() {
-    //   console.log('Database seeded');
-    // });
   }
 });

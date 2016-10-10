@@ -7,7 +7,7 @@ module.exports = {
     var token = req.headers['x-access-token'] || req.body.token || req.query.token;
     // decode token
     if (token) {
-      jwt.verify(token, config.secret, function(err, decoded) {
+      jwt.verify(token, config.test.secret, function(err, decoded) {
         if (err) {
           res.json({ success: false, message: 'Token authentication failed' });
         } else {
